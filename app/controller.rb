@@ -1,16 +1,38 @@
 module NestedTable
   class Controller < UITableViewController
-    attr_accessor :master_menu, :submenus
+    attr_accessor :master_menu, :submenus, :selected
 
     def init
       initWithStyle(UITableViewStylePlain)
       @master_menu = tableView
+      @selected = -1
       @submenus = []
       self
     end
 
     def tableView(table_view, didSelectRowAtIndexPath:index_path)
-      # if table_view == @master_menu
+      cell = table_view.cellForRowAtIndexPath(index_path)
+      if table_view == @master_menu
+        last_selected = @selected
+        @selected = index_path.row
+
+        old_index_path = NSIndexPath.indexPathForRow(@selected, inSection:0)
+        old_cell = @master_menu.cellForRowAtIndexPath(old_index_path)
+
+        label_frame = cell.textLabel.frame
+        arrow_frame = cell.imageView.frame
+        @master_menu.beginUpdates
+        @master_menu.endUpdates
+        cell.textLabel.frame = label_frame
+        cell.imageView.frame = arrow_frame
+
+        rotation_radians = 1.57
+        UIView.animateWithDuration(0.2, delay:0, options:0, animations:lambda do
+          old_cell.imageView.transform = CGAffineTransformRotate(old_cell.imageView.transform, -rotation_radians) if last_selected != -1
+          cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, rotation_radians)
+        end, completion:nil)
+
+      end
     end
 
     def tableView(table_view, cellForRowAtIndexPath:index_path)
@@ -58,8 +80,13 @@ module NestedTable
     end
 
     def tableView(table_view, heightForRowAtIndexPath:index_path)
+      row = index_path.row
       if table_view == @master_menu
-        master_item_height
+        if @selected == row
+          master_item_height + submenu_item_height * submenu_items_at(row)
+        else
+          master_item_height
+        end
       else
         submenu_item_height
       end
@@ -90,11 +117,9 @@ module NestedTable
     def new_cell(identifier)
       cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:identifier)
       if identifier == "master cell"
-        cell.textLabel.text = 'hello'
         cell.selectionStyle = UITableViewCellSelectionStyleNone
         cell.imageView.image = UIImage.imageNamed("toggle_master.png")
       else
-        cell.textLabel.text = 'sub rowsies'
         cell.selectionStyle = UITableViewCellSelectionStyleGray
       end
       cell

@@ -35,6 +35,7 @@ describe 'A Nested Table Controller' do
 
   it 'should set up its member variables' do
     @nested_table.master_menu.should == @nested_table.tableView
+    @nested_table.selected.should == -1
     @nested_table.submenus.class.should == Array
   end
 
@@ -71,18 +72,18 @@ describe 'A Nested Table Controller' do
     end
   end
 
-  it 'should use get_master:at: and get_submenu:at:and: when fetching cells' do
-    @nested_table.tableView(@master_menu, numberOfRowsInSection:0) # to instantiate the submenus
-    @nested_table.master_menu_items.times do |master_position|
-      index_path = NSIndexPath.indexPathForRow(master_position, inSection:0)
-      cell = @nested_table.tableView(@master_menu, cellForRowAtIndexPath:index_path)
-      cell.textLabel.text.should == "master @#{master_position}"
+  # it 'should use get_master:at: and get_submenu:at:and: when fetching cells' do
+  #   @nested_table.tableView(@master_menu, numberOfRowsInSection:0) # to instantiate the submenus
+  #   @nested_table.master_menu_items.times do |master_position|
+  #     index_path = NSIndexPath.indexPathForRow(master_position, inSection:0)
+  #     cell = @nested_table.tableView(@master_menu, cellForRowAtIndexPath:index_path)
+  #     cell.textLabel.text.should == "master @#{master_position}"
 
-      @nested_table.submenu_items_at(master_position).times do |submenu_position|
-        index_path = NSIndexPath.indexPathForRow(submenu_position, inSection:0)
-        cell = @nested_table.tableView(@submenus[submenu_position], cellForRowAtIndexPath:index_path)
-        cell.textLabel.text.should == "(#{master_position}) submenu @#{submenu_position}"
-      end
-    end
-  end
+  #     @nested_table.submenu_items_at(master_position).times do |submenu_position|
+  #       index_path = NSIndexPath.indexPathForRow(submenu_position, inSection:0)
+  #       cell = @nested_table.tableView(@submenus[submenu_position], cellForRowAtIndexPath:index_path)
+  #       cell.textLabel.text.should == "(#{master_position}) submenu @#{submenu_position}"
+  #     end
+  #   end
+  # end
 end
