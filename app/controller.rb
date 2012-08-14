@@ -5,7 +5,7 @@ module NestedTable
     def init
       initWithStyle(UITableViewStylePlain)
       @master_menu = tableView
-      @selected = -1
+      @selected = nil
       @submenus = []
       self
     end
@@ -16,7 +16,7 @@ module NestedTable
         last_selected = @selected
         @selected = index_path.row
 
-        old_index_path = NSIndexPath.indexPathForRow(@selected, inSection:0)
+        old_index_path = NSIndexPath.indexPathForRow(last_selected, inSection:0) unless last_selected.nil?
         old_cell = @master_menu.cellForRowAtIndexPath(old_index_path)
 
         label_frame = cell.textLabel.frame
@@ -28,10 +28,9 @@ module NestedTable
 
         rotation_radians = 1.57
         UIView.animateWithDuration(0.2, delay:0, options:0, animations:lambda do
-          old_cell.imageView.transform = CGAffineTransformRotate(old_cell.imageView.transform, -rotation_radians) if last_selected != -1
-          cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, rotation_radians)
+          cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, rotation_radians) unless last_selected == @selected
+          old_cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, -rotation_radians) unless last_selected.nil?
         end, completion:nil)
-
       end
     end
 

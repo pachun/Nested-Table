@@ -35,7 +35,7 @@ describe 'A Nested Table Controller' do
 
   it 'should set up its member variables' do
     @nested_table.master_menu.should == @nested_table.tableView
-    @nested_table.selected.should == -1
+    @nested_table.selected.nil?.should == true
     @nested_table.submenus.class.should == Array
   end
 
@@ -44,8 +44,9 @@ describe 'A Nested Table Controller' do
   end
 
   it 'should forward \'height for row at index path\' to \'item_height\'' do
-    @nested_table.tableView(@master_menu, heightForRowAtIndexPath:nil).should == @nested_table.master_item_height
-    @nested_table.tableView(nil, heightForRowAtIndexPath:nil).should == @nested_table.submenu_item_height
+    index_path = NSIndexPath.indexPathForRow(0, inSection:0)
+    @nested_table.tableView(@master_menu, heightForRowAtIndexPath:index_path).should == @nested_table.master_item_height
+    @nested_table.tableView(nil, heightForRowAtIndexPath:index_path).should == @nested_table.submenu_item_height
   end
 
   it 'should have menu indentation presets' do
