@@ -27,10 +27,12 @@ module NestedTable
         cell.imageView.frame = arrow_frame
 
         rotation_radians = 1.57
-        UIView.animateWithDuration(0.2, delay:0, options:0, animations:lambda do
-          cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, rotation_radians) unless last_selected == @selected
-          old_cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, -rotation_radians) unless last_selected.nil?
-        end, completion:nil)
+        unless @selected == last_selected # animated on a new row selection
+          UIView.animateWithDuration(0.2, delay:0, options:0, animations:lambda do
+            cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, rotation_radians)
+            old_cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, -rotation_radians) unless last_selected.nil?
+          end, completion:nil)
+        end
       end
     end
 
