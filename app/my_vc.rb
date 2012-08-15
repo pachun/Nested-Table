@@ -21,7 +21,7 @@ class MyViewController < NestedTable::Controller
   end
 
   def get_submenu(cell, at:master_position, and:submenu_position)
-    cell.textLabel.text = "(#{master_position}) submenu @#{submenu_position}"
+    cell.textLabel.text = "submenu @#{submenu_position}"
     cell
   end
 
