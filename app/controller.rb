@@ -39,6 +39,10 @@ module NestedTable
           end)
 
         end
+      else
+        master_index = @selected
+        submenu_index = index_path.row
+        touched_item(master_index, submenu_index)
       end
     end
 

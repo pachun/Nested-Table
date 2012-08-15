@@ -24,4 +24,8 @@ class MyViewController < NestedTable::Controller
     cell.textLabel.text = "(#{master_position}) submenu @#{submenu_position}"
     cell
   end
+
+  def touched_item(master_item_position, submenu_item_position)
+    puts "touched item @ (#{master_item_position}, #{submenu_item_position})"
+  end
 end
