@@ -30,16 +30,27 @@ module NestedTable
         unless @selected == last_selected # animated on a new row selection
           UIView.animateWithDuration(0.2, delay:0, options:0, animations:lambda do
             cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, rotation_radians)
-            old_cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, -rotation_radians) unless last_selected.nil?
-          end, completion:nil)
+            unless last_selected.nil?
+              @submenus[ last_selected ].hidden = true
+              old_cell.imageView.transform = CGAffineTransformRotate(cell.imageView.transform, -rotation_radians)
+            end
+          end, completion:lambda do |finished_animating|
+            @submenus[ @selected ].hidden = false
+          end)
+
         end
       end
+    end
+
+    def show_submenu
     end
 
     def tableView(table_view, cellForRowAtIndexPath:index_path)
       if table_view == @master_menu
         cell = get_cell "master cell"
         master_position = index_path.row
+        cell.frame = [ [CGRectGetMinX(cell.frame), CGRectGetMinY(cell.frame)], [CGRectGetWidth(cell.frame), master_item_height] ]
+        cell.addSubview(@submenus[master_position])
         get_master(cell, at:master_position)
       else
         cell = get_cell "submenu cell"
@@ -64,8 +75,10 @@ module NestedTable
           ypos = master_item_height
           width = CGRectGetWidth(@master_menu.frame)
           height = submenu_item_height * submenu_items_at(master_position)
-          submenu_frame = [[xpos, ypos], [width, height]]
+          submenu_frame = [ [xpos, ypos], [width, height] ]
           @submenus << UITableView.alloc.initWithFrame(submenu_frame, style:UITableViewStylePlain)
+          @submenus.last.separatorStyle = UITableViewCellSeparatorStyleNone
+          @submenus.last.hidden = true
           @submenus.last.delegate = self
           @submenus.last.dataSource = self
         end
