@@ -1,6 +1,6 @@
 # It Animates
 
-![Imgur](http://i.imgur.com/JSy3v.png)
+![Imgur](http://i.imgur.com/1BScz.png)
 
 # Simply
 ```ruby
