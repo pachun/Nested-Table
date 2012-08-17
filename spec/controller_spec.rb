@@ -6,7 +6,13 @@ describe 'A Nested Table Controller' do
       end
 
       def submenu_items_at(position)
-        3
+        if position == 0
+          1
+        elsif position == 1
+          2
+        else
+          3
+        end
       end
 
       def master_item_height
@@ -68,7 +74,8 @@ describe 'A Nested Table Controller' do
 
   it 'should forward \'rows in section\' to \'submenu_items_at(position)\' for the submenus' do
     @nested_table.tableView(@master_menu, numberOfRowsInSection:0) # to instantiate the submenus
-    @submenus.each do |submenu, position|
+    @submenus.each_with_index do |submenu, position|
+      print "\n#{@nested_table.tableView(submenu, numberOfRowsInSection:0)}.should == #{@nested_table.submenu_items_at(position)} (for position #{position})"
       @nested_table.tableView(submenu, numberOfRowsInSection:0).should == @nested_table.submenu_items_at(position)
     end
   end

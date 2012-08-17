@@ -4,7 +4,13 @@ class MyViewController < NestedTable::Controller
   end
 
   def submenu_items_at(position)
-    3
+    if position == 0
+      1
+    elsif position == 1
+      3
+    else
+      2
+    end
   end
 
   def master_item_height

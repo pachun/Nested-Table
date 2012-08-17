@@ -87,9 +87,7 @@ module NestedTable
           @submenus.last.dataSource = self
         end
       else
-
-        # find the submenu's index
-        @submenus.each do |submenu, position|
+        @submenus.each_with_index do |submenu, position|
           items = submenu_items_at(position) if table_view == submenu
         end
       end
